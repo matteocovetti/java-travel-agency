@@ -16,77 +16,43 @@ public class Vacanza {
 
 	// attributi
 	private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	private String destinazione, dataInizio, dataFine;
+	private String destinazione;
 
-	private LocalDate dataInizioForm = LocalDate.parse(dataInizio, format);
-	private LocalDate dataFineForm = LocalDate.parse(dataFine, format);
+	private LocalDate dataInizio;
+	private LocalDate dataFine;
 
 	// costruttore
-	public Vacanza(String destinazione, String dataInizio, String dataFine)
-			throws IllegalArgumentException, NullPointerException {
+	public Vacanza(String destinazione, LocalDate dataInizio, LocalDate dataFine)
+			throws NullPointerException, IllegalArgumentException {
 		super();
+		// prima di assegnare i valori agli attributi li testo
+		// prima di tutto controllo che non siano null
+		if (destinazione == null) {
+			throw new NullPointerException("Destinazione non può essere null");
+		}
+		if (dataInizio == null) {
+			throw new NullPointerException("Data inizio non può essere null");
+		}
+		if (dataFine == null) {
+			throw new NullPointerException("Data fine non può essere null");
+		}
 
-		validaDestinazione(destinazione);
-		validaDataInizio(dataInizio);
-		validaDataFine(dataFine);
+		// poi controllo che i valori siano validi
+		// data inizio non passata
+		if (dataInizio.isBefore(LocalDate.now())) {
+			throw new IllegalArgumentException("Data inizio non può essee passata");
+		}
+		// data fine non precedente a data inizio
+		if (dataInizio.isAfter(dataFine)) {
+			throw new IllegalArgumentException("Data fine non può essere precedente a data inizio");
+		}
 
+		// se ho passato le validazioni inizializzo gli attributi dell'oggetto
 		this.destinazione = destinazione;
 		this.dataInizio = dataInizio;
 		this.dataFine = dataFine;
 	}
 
 	// getter e setter
-	public String getDestinazione() {
-		return destinazione;
-	}
-
-	public void setDestinazione(String destinazione) throws NullPointerException {
-		validaDestinazione(destinazione);
-		this.destinazione = destinazione;
-	}
-
-	public String getDataInizio() {
-		return dataInizio;
-	}
-
-	public void setDataInizio(String dataInizio) throws IllegalArgumentException, NullPointerException {
-		validaDataInizio(dataInizio);
-		this.dataInizio = dataInizio;
-	}
-
-	public String getDataFine() {
-		return dataFine;
-	}
-
-	public void setDataFine(String dataFine) throws IllegalArgumentException, NullPointerException {
-		validaDataFine(dataFine);
-		this.dataFine = dataFine;
-	}
-
-	// metodi di validazione
-	private void validaDataInizio(String dataInizioInput) throws IllegalArgumentException, NullPointerException {
-		LocalDate oggi = LocalDate.now();
-		if (dataInizioInput == null) {
-			throw new NullPointerException("Data inizio non può essere null");
-		}
-		if (LocalDate.parse(dataInizioInput, format).isBefore(oggi)) {
-			throw new IllegalArgumentException("La data di partenza non può essere precendente alla data odierna");
-		}
-	}
-
-	private void validaDataFine(String dataFineInput) throws IllegalArgumentException, NullPointerException {
-		if (dataFineInput == null) {
-			throw new NullPointerException("Data fine non può essere null");
-		}
-		if (LocalDate.parse(dataFineInput, format).isBefore(LocalDate.parse(dataInizio, format))) {
-			throw new IllegalArgumentException("La data di ritorno non può essere precedente alla data di partenza");
-		}
-	}
-
-	private void validaDestinazione(String destinazioneInput) {
-		if (destinazioneInput == null) {
-			throw new NullPointerException("La destinazione non può essere null");
-		}
-	}
 
 }
