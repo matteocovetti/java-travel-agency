@@ -1,7 +1,7 @@
 package jana60;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.Period;
 
 public class Vacanza {
 	/*
@@ -15,7 +15,7 @@ public class Vacanza {
 	 */
 
 	// attributi
-	private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
 	private String destinazione;
 
 	private LocalDate dataInizio;
@@ -88,6 +88,25 @@ public class Vacanza {
 		validaData(dataFine);
 		validaDataInizioDataFine(this.dataInizio, dataFine);
 		this.dataFine = dataFine;
+	}
+
+	// metodi public
+	public Period getDurata() {
+		return Period.between(this.dataInizio, this.dataFine);
+	}
+
+	public String getDurataString() {
+		Period durata = getDurata();
+		String durataString = "";
+		if (durata.getYears() > 0) {
+			durataString += durata.getYears() + " anni";
+		}
+		if (durata.getMonths() > 0) {
+			durataString += durata.getMonths() + " mesi";
+		}
+		durataString += durata.getDays() + " giorni";
+
+		return durataString;
 	}
 
 	// metodi private
