@@ -27,25 +27,30 @@ public class Vacanza {
 		super();
 		// prima di assegnare i valori agli attributi li testo
 		// prima di tutto controllo che non siano null
-		if (destinazione == null) {
-			throw new NullPointerException("Destinazione non può essere null");
-		}
-		if (dataInizio == null) {
-			throw new NullPointerException("Data inizio non può essere null");
-		}
-		if (dataFine == null) {
-			throw new NullPointerException("Data fine non può essere null");
-		}
+//		if (destinazione == null) {
+//			throw new NullPointerException("Destinazione non può essere null");
+//		}
+//		if (dataInizio == null) {
+//			throw new NullPointerException("Data inizio non può essere null");
+//		}
+//		if (dataFine == null) {
+//			throw new NullPointerException("Data fine non può essere null");
+//		}
+//
+//		// poi controllo che i valori siano validi
+//		// data inizio non passata
+//		if (dataInizio.isBefore(LocalDate.now())) {
+//			throw new IllegalArgumentException("Data inizio non può essee passata");
+//		}
+//		// data fine non precedente a data inizio
+//		if (dataInizio.isAfter(dataFine)) {
+//			throw new IllegalArgumentException("Data fine non può essere precedente a data inizio");
+//		}
 
-		// poi controllo che i valori siano validi
-		// data inizio non passata
-		if (dataInizio.isBefore(LocalDate.now())) {
-			throw new IllegalArgumentException("Data inizio non può essee passata");
-		}
-		// data fine non precedente a data inizio
-		if (dataInizio.isAfter(dataFine)) {
-			throw new IllegalArgumentException("Data fine non può essere precedente a data inizio");
-		}
+		validaDestinazione(destinazione);
+		validaData(dataInizio);
+		validaData(dataFine);
+		validaDataInizioDataFine(dataInizio, dataFine);
 
 		// se ho passato le validazioni inizializzo gli attributi dell'oggetto
 		this.destinazione = destinazione;
@@ -54,5 +59,57 @@ public class Vacanza {
 	}
 
 	// getter e setter
+
+	public String getDestinazione() {
+		return destinazione;
+	}
+
+	// se posso modificare il valore di destinazione lo devo prima validare
+	public void setDestinazione(String destinazione) throws NullPointerException {
+		validaDestinazione(destinazione);
+		this.destinazione = destinazione;
+	}
+
+	public LocalDate getDataInizio() {
+		return dataInizio;
+	}
+
+	public void setDataInizio(LocalDate dataInizio) throws NullPointerException, IllegalArgumentException {
+		validaData(dataInizio);
+		validaDataInizioDataFine(dataInizio, getDataFine());
+		this.dataInizio = dataInizio;
+	}
+
+	public LocalDate getDataFine() {
+		return dataFine;
+	}
+
+	public void setDataFine(LocalDate dataFine) throws NullPointerException, IllegalArgumentException {
+		validaData(dataFine);
+		validaDataInizioDataFine(this.dataInizio, dataFine);
+		this.dataFine = dataFine;
+	}
+
+	// metodi private
+	private void validaDestinazione(String destinazione) throws NullPointerException {
+		if (destinazione == null) {
+			throw new NullPointerException("Destinazione non può essere null");
+		}
+	}
+
+	private void validaData(LocalDate data) throws NullPointerException, IllegalArgumentException {
+		if (data == null) {
+			throw new NullPointerException("Data non può essere null");
+		}
+		if (data.isBefore(LocalDate.now())) {
+			throw new IllegalArgumentException("Data non può essee passata");
+		}
+	}
+
+	private void validaDataInizioDataFine(LocalDate dataInizio, LocalDate dataFine) throws IllegalArgumentException {
+		if (dataInizio.isAfter(dataFine)) {
+			throw new IllegalArgumentException("Data fine non può essere precedente a data inizio");
+		}
+	}
 
 }
